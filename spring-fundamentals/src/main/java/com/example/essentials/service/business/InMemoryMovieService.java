@@ -5,18 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
-
 import com.example.essentials.domain.Director;
 import com.example.essentials.domain.Genre;
 import com.example.essentials.domain.Movie;
 import com.example.essentials.model.CriteriaBean;
 import com.example.essentials.service.MovieService;
 import com.example.essentials.service.SequenceService;
-
-import jakarta.annotation.PostConstruct;
 
 /**
  * 
