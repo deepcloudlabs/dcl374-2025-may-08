@@ -22,15 +22,16 @@ import com.example.essentials.service.SequenceService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.inject.Inject;
 
 @RestController
-//@RequestScope // == // @Scope("request")
+@RequestScope // == // @Scope("request")
 @RequestMapping("/movies")
 @CrossOrigin
 @Validated
 public class ImdbRestController extends BaseController {
-	// @Autowired // Field Injection
-	private final MovieService movieService;
+	// @Autowired // Field Injection	
+	private MovieService movieService;
 	// Best-practice: Constructor Injection
 	public ImdbRestController(MovieService movieService,SequenceService sequenceService) {
 		super(sequenceService);

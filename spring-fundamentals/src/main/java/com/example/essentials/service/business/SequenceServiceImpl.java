@@ -3,15 +3,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.example.essentials.model.Bilesen;
 import com.example.essentials.service.SequenceService;
+
+import jakarta.inject.Named;
 
 /**
  * 
  * @author Binnur Kurt
  *
  */
-@Bilesen
+@Named
 public class SequenceServiceImpl implements SequenceService {
 	private Map<String, AtomicLong> sequences = new ConcurrentHashMap<String, AtomicLong>();
 
