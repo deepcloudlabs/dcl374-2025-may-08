@@ -18,22 +18,24 @@ import org.springframework.web.context.annotation.RequestScope;
 import com.example.essentials.domain.Movie;
 import com.example.essentials.model.CriteriaBean;
 import com.example.essentials.service.MovieService;
+import com.example.essentials.service.SequenceService;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 @RestController
-@RequestScope // == // @Scope("request")
+//@RequestScope // == // @Scope("request")
 @RequestMapping("/movies")
 @CrossOrigin
 @Validated
 public class ImdbRestController extends BaseController {
-	@Autowired // Field Injection
-	private MovieService movieService;
-	
-	
-	public ImdbRestController() {
-		super();
-		System.out.println("ImdbRestController()");
+	// @Autowired // Field Injection
+	private final MovieService movieService;
+	// Best-practice: Constructor Injection
+	public ImdbRestController(MovieService movieService,SequenceService sequenceService) {
+		super(sequenceService);
+		this.movieService = movieService;
+		System.out.println("ImdbRestController(MovieService movieService)");
 		System.out.println(movieService);
 		for (var method: ImdbRestController.class.getMethods()) {
 			if (method.isAnnotationPresent(PostConstruct.class)) {
@@ -54,6 +56,10 @@ public class ImdbRestController extends BaseController {
 		System.out.println(movieService);		
 	}
 	
+	@PreDestroy
+	public void yoket() {		
+		System.out.println("yoket: %s".formatted(this));		
+	}
 	// POST http://localhost:8200/imdb/api/v1/movies
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})

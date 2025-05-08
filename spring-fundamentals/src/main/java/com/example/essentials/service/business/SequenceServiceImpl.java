@@ -3,8 +3,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.springframework.stereotype.Service;
-
+import com.example.essentials.model.Bilesen;
 import com.example.essentials.service.SequenceService;
 
 /**
@@ -12,7 +11,7 @@ import com.example.essentials.service.SequenceService;
  * @author Binnur Kurt
  *
  */
-@Service
+@Bilesen
 public class SequenceServiceImpl implements SequenceService {
 	private Map<String, AtomicLong> sequences = new ConcurrentHashMap<String, AtomicLong>();
 

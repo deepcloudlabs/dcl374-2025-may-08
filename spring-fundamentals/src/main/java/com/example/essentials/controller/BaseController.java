@@ -1,20 +1,17 @@
 package com.example.essentials.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.example.essentials.service.SequenceService;
 
 import jakarta.annotation.PostConstruct;
 
-@Component
 public abstract class BaseController {
-	@Autowired
-	private SequenceService sequenceService;
+	
+	private final SequenceService sequenceService;
 
 	
-	public BaseController() {
-		System.out.println("BaseController()");
+	public BaseController(SequenceService sequenceService) {
+		this.sequenceService = sequenceService;
+		System.out.println("BaseController(SequenceService sequenceService)");
 	}
 
 

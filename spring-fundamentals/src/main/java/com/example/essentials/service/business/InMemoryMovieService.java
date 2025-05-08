@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -15,20 +16,27 @@ import com.example.essentials.model.CriteriaBean;
 import com.example.essentials.service.MovieService;
 import com.example.essentials.service.SequenceService;
 
+import jakarta.annotation.PostConstruct;
+
 /**
  * 
  * @author Binnur Kurt
  *
  */
-@Repository
-@Scope("singleton")
 public class InMemoryMovieService implements MovieService {
 	private SequenceService sequenceSrv;
 	private Map<Integer, Movie> movies;
 	private Map<Integer, Genre> genres;
 	private Map<Integer, Director> directors;
 
-	public InMemoryMovieService() {
+//	@Autowired // setter injection
+//	public void setSequenceSrv(SequenceService sequenceSrv) {
+//		this.sequenceSrv = sequenceSrv;
+//	}
+
+	// Constructor Injection
+	public InMemoryMovieService(SequenceService sequenceSrv) {
+		this.sequenceSrv = sequenceSrv;
 		movies = new ConcurrentHashMap<>();
 		genres = new ConcurrentHashMap<>();
 		directors = new ConcurrentHashMap<>();
