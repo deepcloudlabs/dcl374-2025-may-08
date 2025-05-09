@@ -15,6 +15,7 @@ import com.example.lottery.service.RandomNumberGenerator;
 
 @Service
 @RefreshScope
+@SuppressWarnings("unused")
 public class StandardLotteryService implements LotteryService {
 
 	private final int lotteryMax;

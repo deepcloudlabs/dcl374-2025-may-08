@@ -2,15 +2,11 @@ package com.example.service.impl;
 
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import com.example.aop.Profile;
 import com.example.service.Calculator;
-
-import jakarta.annotation.security.RolesAllowed;
 
 /**
  * 
