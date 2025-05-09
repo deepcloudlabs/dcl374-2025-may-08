@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import com.example.lottery.dto.response.LotteryModel;
@@ -13,6 +14,7 @@ import com.example.lottery.service.LotteryService;
 import com.example.lottery.service.RandomNumberGenerator;
 
 @Service
+@RefreshScope
 public class StandardLotteryService implements LotteryService {
 
 	private final int lotteryMax;
