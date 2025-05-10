@@ -26,6 +26,7 @@ import com.example.crm.dto.response.PatchCustomerResponse;
 import com.example.crm.dto.response.ReleaseCustomerResponse;
 import com.example.crm.dto.response.UpdateCustomerResponse;
 import com.example.crm.service.CustomerService;
+import com.example.validation.TcKimlikNo;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,8 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 @RestController
 @RequestScope
@@ -57,29 +60,30 @@ public class CrmRestController {
 		@ApiResponse(responseCode = "200", description = "Customer Information")
 	})
 	@GetMapping(params = { "page", "size" })
-	public List<CustomerDTO> getCustomersByPage(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size) {
+	public List<CustomerDTO> getCustomersByPage(
+			@RequestParam(defaultValue = "0") @Min(0) int page,
+			@RequestParam(defaultValue = "10") @Min(10) @Max(50) int size) {
 		return customerService.findAll(page, size);
 	}
 
 	@GetMapping("{identity}")
-	public CustomerDTO getCustomerByIdentity(@PathVariable String identity) {
+	public CustomerDTO getCustomerByIdentity(@PathVariable @TcKimlikNo String identity) {
 		return customerService.findCustomerByIdentity(identity);
 	}
 	
 	@GetMapping("{identity}/addresses")
-	public CustomerAddressResponse getCustomerAddressByIdentity(@PathVariable String identity) {
+	public CustomerAddressResponse getCustomerAddressByIdentity(@PathVariable @TcKimlikNo String identity) {
 		return customerService.findCustomerAddressByIdentity(identity);
 	}
 
 	// Command
 	@PostMapping
-	public AcquireCustomerResponse acquireCustomer(@RequestBody AcquireCustomerRequest request) {
+	public AcquireCustomerResponse acquireCustomer(@RequestBody @Validated AcquireCustomerRequest request) {
 		return customerService.acquireCustomer(request);
 	}
 
 	@PutMapping("{identity}")
-	public UpdateCustomerResponse updateCustomer(@PathVariable String identity,@RequestBody UpdateCustomerRequest request) {
+	public UpdateCustomerResponse updateCustomer(@PathVariable @TcKimlikNo String identity,@RequestBody UpdateCustomerRequest request) {
 		return customerService.updateCustomer(request);
 	}
 
@@ -89,7 +93,7 @@ public class CrmRestController {
 	}
 
 	@DeleteMapping("{identity}")
-	public ReleaseCustomerResponse releaseCustomer(@PathVariable String identity) {
+	public ReleaseCustomerResponse releaseCustomer(@PathVariable @Validated @TcKimlikNo String identity) {
 		return customerService.releaseCustomer(identity);
 	}
 }

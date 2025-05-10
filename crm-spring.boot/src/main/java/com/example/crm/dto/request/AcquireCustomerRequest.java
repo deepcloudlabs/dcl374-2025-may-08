@@ -4,8 +4,16 @@ import java.util.Base64;
 import java.util.List;
 
 import com.example.crm.entity.Customer;
+import com.example.validation.TcKimlikNo;
 
-public record AcquireCustomerRequest(String identity,String fullname,String email,List<PhoneRequest> phones,List<AddressRequest> addresses,String photo) {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record AcquireCustomerRequest(
+		@TcKimlikNo String identity,
+		@NotBlank @Size(min=2) String fullname,
+		@Email String email,List<PhoneRequest> phones,List<AddressRequest> addresses,String photo) {
 
 	public Customer toCustomer() {
 		var customer = new Customer();

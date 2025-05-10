@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.example.validation.TcKimlikNo;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,16 +16,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "customers")
 @DynamicUpdate
 public class Customer {
 	@Id
+	@TcKimlikNo
 	private String identity;
 	@Column(name = "fname")
+	@NotBlank
+	@Size(min=2)
 	private String fullname;
 	@Column(name="eposta")
+	@Email
 	private String email;
 	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
 	private List<Phone> phones;
