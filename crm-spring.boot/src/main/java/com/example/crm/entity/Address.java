@@ -1,7 +1,7 @@
 package com.example.crm.entity;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -21,7 +21,7 @@ public class Address {
 	@Column(name = "addr_id")
 	private Long id;
 	@ElementCollection
-	private List<String> lines;
+	private Set<String> addressLines;
 	@Enumerated(EnumType.STRING)
 	private AddressType type;
 	private String country;
@@ -38,12 +38,13 @@ public class Address {
 		this.id = id;
 	}
 
-	public List<String> getLines() {
-		return lines;
+
+	public Set<String> getAddressLines() {
+		return addressLines;
 	}
 
-	public void setLines(List<String> lines) {
-		this.lines = lines;
+	public void setAddressLines(Set<String> addressLines) {
+		this.addressLines = addressLines;
 	}
 
 	public AddressType getType() {
@@ -89,7 +90,7 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [id=" + id + ", lines=" + lines + ", type=" + type + ", country=" + country + ", city=" + city
+		return "Address [id=" + id + ", addressLines=" + addressLines + ", type=" + type + ", country=" + country + ", city=" + city
 				+ "]";
 	}
 
