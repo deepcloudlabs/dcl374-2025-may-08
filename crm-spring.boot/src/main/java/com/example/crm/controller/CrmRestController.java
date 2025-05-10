@@ -79,7 +79,7 @@ public class CrmRestController {
 	}
 
 	@PutMapping("{identity}")
-	public UpdateCustomerResponse updateCustomer(@RequestBody UpdateCustomerRequest request) {
+	public UpdateCustomerResponse updateCustomer(@PathVariable String identity,@RequestBody UpdateCustomerRequest request) {
 		return customerService.updateCustomer(request);
 	}
 

@@ -4,9 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
@@ -14,6 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "customers")
+@DynamicUpdate
 public class Customer {
 	@Id
 	private String identity;
@@ -21,7 +25,7 @@ public class Customer {
 	private String fullname;
 	@Column(name="eposta")
 	private String email;
-	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
 	private List<Phone> phones;
 	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	private List<Address> addresses;
