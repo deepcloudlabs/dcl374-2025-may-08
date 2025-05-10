@@ -5,7 +5,7 @@ import java.util.Set;
 import com.example.crm.entity.Address;
 import com.example.crm.entity.AddressType;
 
-public record AddressRequest(long addressId, AddressType type, String country, String city, Set<String> lines) {
+public record AddressRequest(Long addressId, AddressType type, String country, String city, Set<String> lines) {
 	public Address toAddress() {
 		var address = new Address();
 		address.setId(addressId);

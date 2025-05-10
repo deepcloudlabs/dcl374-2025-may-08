@@ -11,7 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.crm.dto.request.AcquireCustomerRequest;
 import com.example.crm.dto.request.UpdateCustomerRequest;
 import com.example.crm.dto.response.AcquireCustomerResponse;
+import com.example.crm.dto.response.AddressResponse;
+import com.example.crm.dto.response.CustomerAddressResponse;
 import com.example.crm.dto.response.CustomerDTO;
+import com.example.crm.dto.response.CustomerQLResponse;
 import com.example.crm.dto.response.PatchCustomerResponse;
 import com.example.crm.dto.response.ReleaseCustomerResponse;
 import com.example.crm.dto.response.UpdateCustomerResponse;
@@ -75,6 +78,18 @@ public class StandardCustomerService implements CustomerService {
 	@Override
 	@Transactional
 	public PatchCustomerResponse patchCustomer(Map<String, Object> request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CustomerAddressResponse findCustomerAddressByIdentity(String identity) {
+		var customer = customerRepository.findById(identity).orElseThrow(() -> new IllegalArgumentException("Cannot find customer: %s".formatted(identity)));	
+		return CustomerAddressResponse.valueOf(customer);
+	}
+
+	@Override
+	public CustomerQLResponse findCustomerQLByIdentity(String identity) {
 		// TODO Auto-generated method stub
 		return null;
 	}

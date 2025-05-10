@@ -20,17 +20,28 @@ import org.springframework.web.context.annotation.RequestScope;
 import com.example.crm.dto.request.AcquireCustomerRequest;
 import com.example.crm.dto.request.UpdateCustomerRequest;
 import com.example.crm.dto.response.AcquireCustomerResponse;
+import com.example.crm.dto.response.CustomerAddressResponse;
 import com.example.crm.dto.response.CustomerDTO;
 import com.example.crm.dto.response.PatchCustomerResponse;
 import com.example.crm.dto.response.ReleaseCustomerResponse;
 import com.example.crm.dto.response.UpdateCustomerResponse;
 import com.example.crm.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestScope
 @RequestMapping("/customers")
 @CrossOrigin
 @Validated
+@OpenAPIDefinition(
+   info = @Info(title="CRM REST API", contact = @Contact(name="Binnur Kurt",email = "binnur.kurt@gmail.com",url = "https://www.deepcloudlabs.com"))
+)
 public class CrmRestController {
 	private final CustomerService customerService;
 
@@ -39,7 +50,12 @@ public class CrmRestController {
 		System.err.println("CrmRestController(): %s".formatted(customerService.getClass().getName()));
 	}
 
+	// "http://localhost:6100/crm/api/v1/customers?page=0&size=10"
 	// Query
+	@Operation(summary = "Retrieves customer information")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Customer Information")
+	})
 	@GetMapping(params = { "page", "size" })
 	public List<CustomerDTO> getCustomersByPage(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
@@ -49,6 +65,11 @@ public class CrmRestController {
 	@GetMapping("{identity}")
 	public CustomerDTO getCustomerByIdentity(@PathVariable String identity) {
 		return customerService.findCustomerByIdentity(identity);
+	}
+	
+	@GetMapping("{identity}/addresses")
+	public CustomerAddressResponse getCustomerAddressByIdentity(@PathVariable String identity) {
+		return customerService.findCustomerAddressByIdentity(identity);
 	}
 
 	// Command

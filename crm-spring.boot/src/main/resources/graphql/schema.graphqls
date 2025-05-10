@@ -1,0 +1,29 @@
+type Query {
+    customerById(identity: ID): CustomerQLResponse
+}
+
+type PhoneQLResponse {
+	phoneId: ID
+	type: String
+	country: String
+	number: String
+	extension: String
+}
+
+
+type AddressQLResponse {
+	id: ID
+	type: String
+	country: String
+	city: String
+	lines: [String]
+}
+
+type CustomerQLResponse {
+	identity: ID
+	fullname: String
+	email: String
+	photo: String
+	phones: [PhoneQLResponse]
+	addresses: [AddressQLResponse]
+}

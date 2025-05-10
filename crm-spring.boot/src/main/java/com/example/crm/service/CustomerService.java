@@ -6,7 +6,9 @@ import java.util.Map;
 import com.example.crm.dto.request.AcquireCustomerRequest;
 import com.example.crm.dto.request.UpdateCustomerRequest;
 import com.example.crm.dto.response.AcquireCustomerResponse;
+import com.example.crm.dto.response.CustomerAddressResponse;
 import com.example.crm.dto.response.CustomerDTO;
+import com.example.crm.dto.response.CustomerQLResponse;
 import com.example.crm.dto.response.PatchCustomerResponse;
 import com.example.crm.dto.response.ReleaseCustomerResponse;
 import com.example.crm.dto.response.UpdateCustomerResponse;
@@ -24,5 +26,9 @@ public interface CustomerService {
 	UpdateCustomerResponse updateCustomer(UpdateCustomerRequest request);
 
 	PatchCustomerResponse patchCustomer(Map<String, Object> request);
+
+	CustomerAddressResponse findCustomerAddressByIdentity(String identity);
+
+	CustomerQLResponse findCustomerQLByIdentity(String identity);
 
 }
