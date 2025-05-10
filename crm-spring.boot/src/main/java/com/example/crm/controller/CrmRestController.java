@@ -33,38 +33,40 @@ import com.example.crm.service.CustomerService;
 @Validated
 public class CrmRestController {
 	private final CustomerService customerService;
-	
+
 	public CrmRestController(CustomerService customerService) {
 		this.customerService = customerService;
+		System.err.println("CrmRestController(): %s".formatted(customerService.getClass().getName()));
 	}
 
-	// Query 
-	@GetMapping(params= {"page","size"})
-	public List<CustomerDTO> getCustomersByPage(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size){
-		return customerService.findAll(page,size);
+	// Query
+	@GetMapping(params = { "page", "size" })
+	public List<CustomerDTO> getCustomersByPage(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		return customerService.findAll(page, size);
 	}
-	
+
 	@GetMapping("{identity}")
-	public CustomerDTO getCustomerByIdentity(@PathVariable String identity){
+	public CustomerDTO getCustomerByIdentity(@PathVariable String identity) {
 		return customerService.findCustomerByIdentity(identity);
 	}
-	
+
 	// Command
 	@PostMapping
 	public AcquireCustomerResponse acquireCustomer(@RequestBody AcquireCustomerRequest request) {
 		return customerService.acquireCustomer(request);
 	}
-	
+
 	@PutMapping("{identity}")
 	public UpdateCustomerResponse updateCustomer(@RequestBody UpdateCustomerRequest request) {
 		return customerService.updateCustomer(request);
 	}
 
 	@PatchMapping("{identity}")
-	public PatchCustomerResponse patchCustomer(@RequestBody Map<String,Object> request) {
+	public PatchCustomerResponse patchCustomer(@RequestBody Map<String, Object> request) {
 		return customerService.patchCustomer(request);
 	}
-	
+
 	@DeleteMapping("{identity}")
 	public ReleaseCustomerResponse releaseCustomer(@PathVariable String identity) {
 		return customerService.releaseCustomer(identity);

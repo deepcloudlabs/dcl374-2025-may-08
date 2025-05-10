@@ -4,9 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.crm.dto.request.AcquireCustomerRequest;
@@ -16,6 +15,8 @@ import com.example.crm.dto.response.CustomerDTO;
 import com.example.crm.dto.response.PatchCustomerResponse;
 import com.example.crm.dto.response.ReleaseCustomerResponse;
 import com.example.crm.dto.response.UpdateCustomerResponse;
+import com.example.crm.event.CustomerAcquiredEvent;
+import com.example.crm.event.CustomerReleasedEvent;
 import com.example.crm.repository.CustomerRepository;
 import com.example.crm.service.CustomerService;
 
@@ -32,29 +33,36 @@ public class StandardCustomerService implements CustomerService {
 
 	@Override
 	public List<CustomerDTO> findAll(int page, int size) {
-		// TODO Auto-generated method stub
-		return null;
+		return customerRepository.findAll(PageRequest.of(page, size))
+				                 .stream()
+				                 .map(CustomerDTO::valueOf).toList();
 	}
 
 	@Override
 	public CustomerDTO findCustomerByIdentity(String identity) {
-		// TODO Auto-generated method stub
-		return null;
+		return customerRepository.findById(identity)
+				                 .map(CustomerDTO::valueOf)
+				                 .orElseThrow(() -> new IllegalArgumentException("Cannot find the customer with identity no: %s".formatted(identity)));
 	}
 
 	// Command -> Domain Event?
 	@Override
-	@Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
+	@Transactional
 	public AcquireCustomerResponse acquireCustomer(AcquireCustomerRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		var savedCustomer = customerRepository.save(request.toCustomer());
+		var event = new CustomerAcquiredEvent(request.identity());
+		eventPublisher.publishEvent(event);
+		return AcquireCustomerResponse.valueOf(savedCustomer);
 	}
 
 	@Override
 	@Transactional
 	public ReleaseCustomerResponse releaseCustomer(String identity) {
-		// TODO Auto-generated method stub
-		return null;
+		var customer = customerRepository.findById(identity).orElseThrow(() -> new IllegalArgumentException("Cannot find the customer to delete: %s".formatted(identity)));
+		customerRepository.delete(customer);
+		var event = new CustomerReleasedEvent(identity);
+		eventPublisher.publishEvent(event);
+		return new ReleaseCustomerResponse(identity);
 	}
 
 	@Override

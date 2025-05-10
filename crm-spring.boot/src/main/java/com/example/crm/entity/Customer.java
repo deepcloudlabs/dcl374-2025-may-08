@@ -27,7 +27,7 @@ public class Customer {
 	@Lob
 	@Column(columnDefinition = "longblob")
 	private byte[] photo;
-
+	
 	public Customer() {
 	}
 

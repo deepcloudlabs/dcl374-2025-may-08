@@ -1,5 +1,5 @@
 package com.example.crm.dto.response;
 
-public record ReleaseCustomerResponse() {
+public record ReleaseCustomerResponse(String identity) {
 
 }
