@@ -8,9 +8,6 @@ import com.example.radiology.dto.request.GenerateAnamnesisRequest;
 import com.example.radiology.dto.response.GenerateAnamnesisResponse;
 import com.example.radiology.service.AnamnesisGanService;
 
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
 @Service
 public class StandardAnamnesisGanService implements AnamnesisGanService {
 	private final String PROMPT_TEXT_TEMPLATE = """
