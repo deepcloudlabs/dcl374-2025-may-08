@@ -1,6 +1,7 @@
 package com.example;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Exercise01 {
@@ -11,10 +12,10 @@ public class Exercise01 {
 		System.out.println(service.workHard());
 		// observer pattern: observable -> result -- event --> observer
 		service.asyncWorkHard().thenAcceptAsync(result -> {
-			System.out.println("Received the result: %d".formatted(result));
+			System.out.println("[%s] Received the result: %d".formatted(Thread.currentThread().getName(),result));
 		});
 		for (var i=0;i<100;++i) {
-			System.out.println("Working another task: %d".formatted(i));
+			System.out.println("[%s] Working another task: %d".formatted(Thread.currentThread().getName(),i));
 			try{TimeUnit.MILLISECONDS.sleep(100);}catch(Exception e) {}
 		}
 	}
@@ -35,7 +36,7 @@ class Service1 {
 	public CompletableFuture<Integer> asyncWorkHard() {
 		return CompletableFuture.supplyAsync(() -> {
 			for (var i=0;i<100;++i) {
-				System.out.println("Working on the hard task: %d".formatted(i));
+				System.out.println("[%s] Working on the hard task: %d".formatted(Thread.currentThread().getName(),i));
 				try{TimeUnit.MILLISECONDS.sleep(100);}catch(Exception e) {}
 			}
 			return 42;			

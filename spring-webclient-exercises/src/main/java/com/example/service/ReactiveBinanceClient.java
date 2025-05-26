@@ -35,6 +35,7 @@ public class ReactiveBinanceClient {
 		        .retrieve()
 		        .bodyToMono(Ticker.class);
 	}
+	
 	public Flux<Ticker> getTickers() {
 		return webClient.get()
 		 		 .uri(uriBuilder -> uriBuilder.path("/ticker/price").build() )
