@@ -27,13 +27,20 @@ public class JdbcTemplateCountryRepository implements CountryRepository {
 	private static final String SELECT_ALL_COUNTRIES = "SELECT * FROM COUNTRY";
 	private static final String INSERT_COUNTRY = "INSERT INTO COUNTRY(CODE,NAME,CONTINENT,POPULATION,SURFACEAREA) "
 			+ "VALUES(?,?,?,?,?)";
-	private static final String UPDATE_COUNTRY = "UPDATE COUNTRY SET POPULATION=?, SURFACEAREA=? " + "WHERE CODE=?";
+	private static final String UPDATE_COUNTRY = """
+			UPDATE COUNTRY 
+			SET POPULATION=?, SURFACEAREA=? WHERE CODE=?
+			""";
 	private static final String DELETE_COUNTRY = "DELETE FROM COUNTRY WHERE CODE=?";
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	@Autowired
-	private CityRepository cityRepository;
+	
+	private final JdbcTemplate jdbcTemplate;
+	private final CityRepository cityRepository;
+
+	public JdbcTemplateCountryRepository(JdbcTemplate jdbcTemplate, CityRepository cityRepository) {
+		this.jdbcTemplate = jdbcTemplate;
+		this.cityRepository = cityRepository;
+	}
 
 	public Optional<Country> findOne(String code) {
 		Country country = jdbcTemplate.queryForObject(SELECT_COUNTRY_BY_CODE,

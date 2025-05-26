@@ -6,8 +6,11 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.example.world.entity.Country;
 import com.example.world.repository.CountryRepository;
@@ -22,8 +25,14 @@ import jakarta.persistence.PersistenceContext;
  */
 @Repository
 public class JpaCountryRepository implements CountryRepository {
-	@PersistenceContext
-	private EntityManager entityManager;
+
+	private final EntityManager entityManager;
+	private final TransactionTemplate txTemplate;
+
+	public JpaCountryRepository(EntityManager entityManager, TransactionTemplate txTemplate) {
+		this.entityManager = entityManager;
+		this.txTemplate = txTemplate;
+	}
 
 	public Optional<Country> findOne(String code) {
 		return ofNullable(entityManager.find(Country.class, code));
@@ -35,15 +44,23 @@ public class JpaCountryRepository implements CountryRepository {
 
 	@Transactional
 	public Country add(Country country) {
-		String code = country.getKod();
-		Optional<Country> found = findOne(code);
-		if (found.isPresent())
-			throw new IllegalArgumentException("Country exists!");
-		entityManager.persist(country);
+		txTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+		txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+		txTemplate.executeWithoutResult( status -> {
+			try {
+				String code = country.getKod();
+				Optional<Country> found = findOne(code);
+				if (found.isPresent())
+					throw new IllegalArgumentException("Country exists!");
+				entityManager.persist(country);				
+			} catch (Exception e) {
+				status.setRollbackOnly();
+			}
+		});
 		return country;
 	}
 
-	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	public Country update(Country country) {
 		String code = country.getKod();
 		Optional<Country> found = findOne(code);
@@ -51,7 +68,8 @@ public class JpaCountryRepository implements CountryRepository {
 			Country c = found.get();
 			c.setPopulation(country.getPopulation());
 			c.setSurface(country.getSurface());
-			entityManager.merge(c);
+			entityManager.merge(c); // UPDATE ....
+			entityManager.flush();
 			return c;
 		}
 		throw new IllegalArgumentException("Country does not exist!");
@@ -64,8 +82,7 @@ public class JpaCountryRepository implements CountryRepository {
 
 	public Collection<Country> getByContinent(String continent) {
 		return entityManager.createNamedQuery("Country.findByContinent", Country.class)
-				 .setParameter("continent", continent)
-				 .getResultList();
+				.setParameter("continent", continent).getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
