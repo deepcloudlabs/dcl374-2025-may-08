@@ -49,7 +49,7 @@ public class WorldBootDataRestApplication implements CommandLineRunner {
 		mongoCountryRepository.findTop10ByOrderByPopulationDesc()
 		.forEach(System.err::println);
 		System.err.println("Done.");
-		Specification<Country> asianHighPopulated = (root, query, criteriaBuilder) -> {
+		Specification<Country> asianHighPopulated = (root, _, criteriaBuilder) -> {
 			return criteriaBuilder.and(criteriaBuilder.gt(root.get("population"), 100_000_000),
 					criteriaBuilder.equal(root.get("continent"), "Asia"),
 					criteriaBuilder.gt(root.get("surface"), 1_000_000.));

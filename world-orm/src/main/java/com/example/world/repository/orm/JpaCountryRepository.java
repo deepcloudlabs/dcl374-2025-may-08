@@ -16,7 +16,6 @@ import com.example.world.entity.Country;
 import com.example.world.repository.CountryRepository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 /**
  * 
